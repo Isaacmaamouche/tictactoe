@@ -4,33 +4,35 @@ import {useState} from "react"
 import "../css/App.Scss";
 
 function Board(props) {
-  function renderSquare(i) {
-    let squareClass = props.squares[i] != null ? "square filled":"square";
+   function renderSquare(i, row, column) {
+    let winClass = props.winnerSquare.includes(i) ? "win":"";
+    console.log(props.winnerSquare.includes(i),props.winnerSquare, i);
+    let filledClass = props.squares[i] != null ? "filled":"";
     return (
-      <button className={squareClass} onClick={()=>props.handleClick(i)} >
+      <button key={`square_${i}`} className={'square ' + filledClass + ' ' + winClass} onClick={()=>props.handleClick(i)} >
         {props.squares[i]}
       </button>
     );
   }
 
+  function renderSquares(){
+    let squares = [];
+    for (let i=0;i<3;i++){
+      let row=[];
+      for (let y=0;y<3;y++){
+        row.push(renderSquare(i * 3 + y, i, y));
+      }
+      squares.push(<div key={`row_${i}`} className="board-row">{row}</div>);
+    }
+    return squares;
+  }
+
     return (
       <div>
-        <div className="status">{props.status}</div>
-        <div className="board-row">
-          {renderSquare(0)}
-          {renderSquare(1)}
-          {renderSquare(2)}
+        <div className="status">
+          {props.status}
         </div>
-        <div className="board-row">
-          {renderSquare(3)}
-          {renderSquare(4)}
-          {renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {renderSquare(6)}
-          {renderSquare(7)}
-          {renderSquare(8)}
-        </div>
+        {renderSquares()}
       </div>
     );
   }
@@ -39,11 +41,13 @@ function Game(){
   let [history,setHistory] = useState([{squares:Array(9).fill(null)}]);
   let [player,setPlayer] = useState("X");
   let [squares,setSquares] = useState(Array(9).fill(null));
-  let status = calculateWinner(squares)==null ? `The next player is : ${player}`: calculateWinner(squares);
+  let calculateWinnerRes = calculateWinner(squares);
+  let status = calculateWinnerRes.status==null ? `The next player is : ${player}`: calculateWinnerRes.status;
+  let winnerSquare = calculateWinnerRes.squares==null ? [] : calculateWinnerRes.squares;
   let [moveNumber, setMoveNumber] = useState(0);
 
   function handleClick(i){
-    if(squares[i]==null && calculateWinner(squares)==null){
+    if(squares[i]==null && calculateWinnerRes.status==null){
       let newSquares = squares.slice();
       newSquares[i] = player;
       setSquares(newSquares);
@@ -67,18 +71,22 @@ function Game(){
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return `The Winner is : ${squares[a]}`;
+        console.log({status:`The Winner is : ${squares[a]}`, squares:lines[i]});
+        return {status:`The Winner is : ${squares[a]}`, squares:lines[i]};
       }
     }
-    return null;
+    if(!squares.includes(null)) return {status:"It's a DRAW !", squares:null};
+    return {status:null, squares:null};
   }
 
   const moves = history.map((step, move) => {
+
     const desc = move ?
       'Go to move #' + move :
       'Go to game start';
+      let currentMove = move==moveNumber ? "currentMove":null;
     if(history.length>1) return (
-      <li key={move}>
+      <li key={move} className={currentMove}>
         <button onClick={() => jumpTo(move, step)}>{desc}</button>
       </li>
     );
@@ -93,7 +101,7 @@ function Game(){
   return (
     <div className="game">
       <div className="game-board">
-        <Board squares={squares} status={status} handleClick={handleClick}/>
+        <Board squares={squares} status={status} handleClick={handleClick} winnerSquare={winnerSquare} />
       </div>
       <div>
 

@@ -12,12 +12,66 @@ h1{
 ul {
   list-style: none;
   padding: 0px;
-  button{
-    color: white;
-    width: 100%;
+  
+  li{
+    position: relative;      
+  }
 
+  li.currentMove::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 5px solid $lmjgreen;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-100%, -50%);
   }
 }
+
+button{
+  cursor: pointer;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 10px;
+  margin: 2px;
+  background-color: $lmjgreen;
+  color: rgb(69, 72, 238);
+  font-weight: bold;
+  transition: all 0.3s ease;
+  color: white;
+  width: 100%;
+  &:hover{
+    transform: translateY(-1px);
+    background-color: lighten($lmjgreen, 5%);
+  }
+
+  &.square{
+    color: rgb(69, 72, 238);
+  }
+
+  &.filled{
+    background-color: lighten($lmjgreen, 5%);
+  }
+
+  &.win {
+    background-color: dodgerblue;
+    color: white;
+    &:hover{
+      background-color: dodgerblue;
+    }
+  }
+
+}
+@media (hover: none){
+  button:hover{
+    transform: translateY(0px);
+    background-color: $lmjgreen;
+  }
+}
+
 
 .board-row:after {
   clear: both;
@@ -61,31 +115,4 @@ ul {
 
 }
 
-button{
-  cursor: pointer;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 10px;
-  margin: 2px;
-  background-color: $lmjgreen;
-  color: rgb(69, 72, 238);
-  font-weight: bold;
-  transition: all 0.3s ease;
-  
-}
 
-button:hover{
-  transform: translateY(-1px);
-  background-color: lighten($lmjgreen, 5%);
-}
-
-.filled{
-  background-color: lighten($lmjgreen, 5%);
-}
-
-@media (hover: none){
-  button:hover{
-    transform: translateY(0px);
-    background-color: $lmjgreen;
-  }
-}
