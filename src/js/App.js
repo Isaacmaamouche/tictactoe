@@ -4,12 +4,11 @@ import {useState} from "react"
 import "../css/App.Scss";
 
 function Board(props) {
-   function renderSquare(i, row, column) {
+   function renderSquare(i, col) {
     let winClass = props.winnerSquare.includes(i) ? "win":"";
-    console.log(props.winnerSquare.includes(i),props.winnerSquare, i);
     let filledClass = props.squares[i] != null ? "filled":"";
     return (
-      <button key={`square_${i}`} className={'square ' + filledClass + ' ' + winClass} onClick={()=>props.handleClick(i)} >
+      <button key={'square_'+i} data-col={col+1} className={'square ' + filledClass + ' ' + winClass} onClick={(e)=>props.handleClick(i, e)} >
         {props.squares[i]}
       </button>
     );
@@ -20,9 +19,9 @@ function Board(props) {
     for (let i=0;i<3;i++){
       let row=[];
       for (let y=0;y<3;y++){
-        row.push(renderSquare(i * 3 + y, i, y));
+        row.push(renderSquare(i * 3 + y, y));
       }
-      squares.push(<div key={`row_${i}`} className="board-row">{row}</div>);
+      squares.push(<div key={'row_'+i} data-row={i+1} className="board-row">{row}</div>);
     }
     return squares;
   }
@@ -30,7 +29,7 @@ function Board(props) {
     return (
       <div>
         <div className="status">
-          {props.status}
+          <p>{props.status}</p>
         </div>
         {renderSquares()}
       </div>
@@ -38,7 +37,7 @@ function Board(props) {
   }
 
 function Game(){
-  let [history,setHistory] = useState([{squares:Array(9).fill(null)}]);
+  let [history,setHistory] = useState([{squares:Array(9).fill(null),squareRow:null,squareCol:null, player:null}]);
   let [player,setPlayer] = useState("X");
   let [squares,setSquares] = useState(Array(9).fill(null));
   let calculateWinnerRes = calculateWinner(squares);
@@ -46,12 +45,14 @@ function Game(){
   let winnerSquare = calculateWinnerRes.squares==null ? [] : calculateWinnerRes.squares;
   let [moveNumber, setMoveNumber] = useState(0);
 
-  function handleClick(i){
+  function handleClick(i, e){
     if(squares[i]==null && calculateWinnerRes.status==null){
+      let row = e.target.parentElement.getAttribute('data-row');
+      let col =e.target.getAttribute('data-col');
       let newSquares = squares.slice();
       newSquares[i] = player;
       setSquares(newSquares);
-      setHistory([...history.slice(0, moveNumber+1),{squares:newSquares}]);
+      setHistory([...history.slice(0, moveNumber+1),{squares:newSquares,squareRow:row,squareCol:col, player:player}]);
       setMoveNumber(moveNumber+1)
       setPlayer(player=="X"?"O":"X");
     }
@@ -71,7 +72,6 @@ function Game(){
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        console.log({status:`The Winner is : ${squares[a]}`, squares:lines[i]});
         return {status:`The Winner is : ${squares[a]}`, squares:lines[i]};
       }
     }
@@ -82,7 +82,7 @@ function Game(){
   const moves = history.map((step, move) => {
 
     const desc = move ?
-      'Go to move #' + move :
+      'Go to move #' + move + ' from player ' + step.player + ' in row-' + step.squareRow + ' & col-' + step.squareCol:
       'Go to game start';
       let currentMove = move==moveNumber ? "currentMove":null;
     if(history.length>1) return (

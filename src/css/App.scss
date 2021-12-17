@@ -2,13 +2,14 @@
 
 :root{  
   font-family: "Century Gothic", Futura, sans-serif;;
-  font-size: 12px;
+  font-size: 16px;
   margin: 20px;
+  background-color: darkslategrey;
+  color: white;
+  text-align: center;
+
 }
 
-h1{
-  text-align: center;
-}
 ul {
   list-style: none;
   padding: 0px;
@@ -21,7 +22,7 @@ ul {
     content: '';
     width: 0;
     height: 0;
-    border-left: 5px solid $lmjgreen;
+    border-left: 5px solid $primary;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
     position: absolute;
@@ -33,34 +34,33 @@ ul {
 
 button{
   cursor: pointer;
-  padding: 6px 12px;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   margin: 2px;
-  background-color: $lmjgreen;
-  color: rgb(69, 72, 238);
+  background-color: $primary;
+  color: white;
   font-weight: bold;
   transition: all 0.3s ease;
-  color: white;
   width: 100%;
   &:hover{
     transform: translateY(-1px);
-    background-color: lighten($lmjgreen, 5%);
+    background-color: lighten($primary, 5%);
   }
 
   &.square{
-    color: rgb(69, 72, 238);
+    color: $secondary;
   }
 
   &.filled{
-    background-color: lighten($lmjgreen, 5%);
+    background-color: lighten($primary, 5%);
   }
 
   &.win {
-    background-color: dodgerblue;
+    background-color: $secondary;
     color: white;
     &:hover{
-      background-color: dodgerblue;
+      background-color: $secondary;
     }
   }
 
@@ -68,7 +68,7 @@ button{
 @media (hover: none){
   button:hover{
     transform: translateY(0px);
-    background-color: $lmjgreen;
+    background-color: $primary;
   }
 }
 
@@ -87,15 +87,14 @@ button{
   background: #fff;
   border: 1px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 2rem;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
+  line-height: 4rem;
+  width: 4rem;
+  height: 4rem;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
-  text-align: center;
-  width: 34px;
 }
 
 .square:focus {
