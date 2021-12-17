@@ -82,6 +82,11 @@ button{
     transform: translateY(-1px);
     background-color: lighten($primary, 5%);
   }
+  @media (hover: none){
+   &:hover{
+      background-color: #fff;
+    }
+  }
 
   &.filled{
     background-color: lighten($primary, 5%);
