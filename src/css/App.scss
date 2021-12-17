@@ -4,7 +4,7 @@
   font-family: "Century Gothic", Futura, sans-serif;;
   font-size: 16px;
   margin: 20px;
-  background-color: darkslategrey;
+  background-color: #282828;
   color: white;
   text-align: center;
 
@@ -43,26 +43,6 @@ button{
   font-weight: bold;
   transition: all 0.3s ease;
   width: 100%;
-  &:hover{
-    transform: translateY(-1px);
-    background-color: lighten($primary, 5%);
-  }
-
-  &.square{
-    color: $secondary;
-  }
-
-  &.filled{
-    background-color: lighten($primary, 5%);
-  }
-
-  &.win {
-    background-color: $secondary;
-    color: white;
-    &:hover{
-      background-color: $secondary;
-    }
-  }
 
 }
 @media (hover: none){
@@ -85,7 +65,6 @@ button{
 
 .square {
   background: #fff;
-  border: 1px solid #999;
   float: left;
   font-size: 2rem;
   font-weight: bold;
@@ -95,14 +74,26 @@ button{
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
-}
+  &:focus {
+    outline: none;
+  }
 
-.square:focus {
-  outline: none;
-}
+  &:hover{
+    transform: translateY(-1px);
+    background-color: lighten($primary, 5%);
+  }
 
-.kbd-navigation .square:focus {
-  background: #ddd;
+  &.filled{
+    background-color: lighten($primary, 5%);
+  }
+
+  &.win {
+    background-color: $secondary;
+    color: white;
+    &:hover{
+      background-color: $secondary;
+    }
+  }
 }
 
 .game {
